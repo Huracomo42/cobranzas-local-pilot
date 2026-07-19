@@ -10,7 +10,7 @@ Este archivo es la única fuente válida para la numeración y estado de gates.
 | P4-1 | Paquete operativo conceptual aprobado                     | Cerrado  |
 | P4-2 | Paquete operativo incorporado al repositorio metodológico | Cerrado  |
 | P4-3 | Creación del nuevo repositorio autorizada                 | Cerrado  |
-| P4-4 | Workflow incorporado y verificado en el nuevo repositorio | En curso |
+| P4-4 | Workflow incorporado y verificado en el nuevo repositorio | Cerrado |
 
 ## Descubrimiento
 
