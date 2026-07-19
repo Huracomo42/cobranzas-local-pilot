@@ -66,7 +66,7 @@ No se registrarán resultados futuros ni acciones todavía no ejecutadas.
 * Decisión humana: creación autorizada.
 * Siguiente estado: incorporar snapshot del workflow.
 
-## Entrada P4-4 — en curso
+## Entrada P4-4
 
 * Fecha: 19 de julio de 2026
 * Gate: P4-4
@@ -80,7 +80,7 @@ No se registrarán resultados futuros ni acciones todavía no ejecutadas.
   * `workflow/INSTALLATION-MANIFEST.md`
   * `workflow/SESSION-LOG.md`
   * `workflow/SKILLS-INVENTORY.md`
-* Evidencia: pendiente de verificación.
-* Resultado: en curso.
-* Decisión humana: preparación autorizada.
-* Siguiente estado: revisar el snapshot antes del commit inicial.
+- Evidencia: commit de bootstrap `1180fa3b5d15f8f3ed144d28b0f480fb8c2affbb`, seis archivos incorporados y repositorio local sincronizado con `origin/main`.
+- Resultado: cerrado.
+- Decisión humana: snapshot verificado y aceptado.
+- Siguiente estado: iniciar investigación del problema, usuario y contexto en P4-5.

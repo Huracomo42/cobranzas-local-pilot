@@ -9,7 +9,7 @@
 * Commit metodológico de origen: `bac26b3cc0e7b3429aa2671e74885cc463c2c254`
 * Fecha de incorporación: 19 de julio de 2026
 * Mecanismo: snapshot versionado y autocontenido
-* Estado: incorporación en curso
+* Estado: incorporación verificada
 
 ## 2. Archivos incorporados
 
@@ -86,4 +86,21 @@ La incorporación será válida cuando una sesión nueva pueda determinar, usand
 
 ## 8. Resultado
 
-Pendiente de verificación y cierre de P4-4.
+Incorporación verificada.
+
+El repositorio contiene el paquete operativo, las reglas esenciales, los gates congelados, el manifiesto, el registro de sesión y el inventario inicial de skills.
+
+El commit inicial de bootstrap es `1180fa3b5d15f8f3ed144d28b0f480fb8c2affbb`.
+
+Una sesión nueva puede determinar desde el repositorio:
+
+- el propósito del workflow;
+- los roles y autoridades;
+- la numeración de gates;
+- la prohibición de implementar antes de P4-11;
+- el protocolo de revisión y evaluación independiente;
+- las reglas de trazabilidad;
+- el tratamiento de skills;
+- las condiciones de cierre.
+
+P4-4 queda cerrado.
