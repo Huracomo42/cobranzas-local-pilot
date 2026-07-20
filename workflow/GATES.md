@@ -26,8 +26,8 @@ Este archivo es la única fuente válida para la numeración y estado de gates.
 | ----- | ---------------------------------------------------- | ----------- |
 | P4-8 | Modelo de dominio aprobado | Cerrado |
 | P4-9 | Diseño técnico aprobado | Cerrado |
-| P4-10 | Vertical slices, backlog y plan de pruebas aprobados | En curso |
-| P4-11 | Tecnología y plan de implementación aprobados | No iniciado |
+| P4-10 | Vertical slices, backlog y plan de pruebas aprobados | Cerrado |
+| P4-11 | Tecnología y plan de implementación aprobados        | En curso |
 
 ## Implementación
 
