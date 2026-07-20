@@ -331,3 +331,55 @@ No se registrarán resultados futuros ni acciones todavía no ejecutadas.
 - Resultado: plan propuesto y pendiente de presión final.
 - Decisión humana: elaboración autorizada.
 - Siguiente estado: revisar y aprobar P4-10.
+
+## Entrada P4-10 — cierre
+
+- Fecha: 20 de julio de 2026
+- Gate: P4-10
+- Contexto: aprobación de vertical slices, backlog y plan de pruebas
+- Actividad:
+  - revisión de las 14 vertical slices;
+  - presión del orden de persistencia;
+  - aclaración de persistencia incremental desde VS-01;
+  - redefinición de VS-10 como endurecimiento y recuperación;
+  - aprobación humana formal.
+- Evidencia:
+  - `docs/IMPLEMENTATION-PLAN.md`;
+  - criterios de aceptación;
+  - backlog priorizado;
+  - plan de pruebas por capas;
+  - aprobación explícita del responsable humano.
+- Resultado: vertical slices, backlog y plan de pruebas aprobados.
+- Decisión humana: P4-10 cerrado.
+- Siguiente estado: selección tecnológica.
+
+## Entrada P4-11 — en curso
+
+- Fecha: 20 de julio de 2026
+- Gate: P4-11
+- Contexto: selección tecnológica y planificación de implementación
+- Actividad:
+  - investigación de tecnologías vigentes;
+  - selección de TypeScript y Node.js 24 LTS;
+  - selección de React, Vite y Tailwind;
+  - selección de Fastify y Zod;
+  - selección de SQLite mediante better-sqlite3;
+  - definición de dinero en unidades mínimas;
+  - selección de Vitest, Testing Library, Playwright y axe-core;
+  - definición de CI Windows;
+  - definición de rutas locales;
+  - definición de instalación y reversión;
+  - evaluación y selección controlada de skills.
+- Archivos afectados:
+  - `docs/TECHNOLOGY-AND-IMPLEMENTATION.md`;
+  - `workflow/GATES.md`;
+  - `workflow/SESSION-LOG.md`.
+- Restricciones respetadas:
+  - sin instalación de dependencias;
+  - sin instalación de skills;
+  - sin scaffolding;
+  - sin pruebas ejecutables;
+  - sin código de producto.
+- Resultado: propuesta tecnológica pendiente de presión final.
+- Decisión humana: elaboración autorizada.
+- Siguiente estado: revisar y aprobar P4-11.
