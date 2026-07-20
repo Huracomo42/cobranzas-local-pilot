@@ -1147,6 +1147,22 @@ Si la persistencia falla, el estado visible deberá conservar o recuperar la úl
 
 La aplicación devolverá resultados explícitos y no dependerá de excepciones silenciosas.
 
+### DT-FLU-04
+
+El flujo general admite secuencias especializadas cuando una operación lo requiera.
+
+En una restauración de respaldo:
+
+1. se valida el respaldo seleccionado;
+2. se vuelve a validar el estado vigente;
+3. se intenta crear un respaldo previo a la restauración;
+4. se prepara y valida el estado candidato restaurado;
+5. se sustituye el estado operativo únicamente si todas las validaciones obligatorias fueron superadas;
+6. se conserva sin cambios el catálogo de respaldos;
+7. se informa el resultado.
+
+El respaldo previo a restauración ocurre antes de sustituir el estado operativo, no después.
+
 ## 28. Unidad de cambio y consistencia
 
 ### 28.1 Cambio lógico
@@ -1192,7 +1208,9 @@ Un fallo durante la escritura no debe destruir el último estado válido.
 
 ### DT-CON-02
 
-Los eventos y cálculos asociados a un comando se persisten junto con el cambio principal.
+Los datos fuente, metadatos y eventos persistentes asociados a un comando se guardarán junto con el cambio principal cuando formen parte del estado operativo.
+
+Los valores derivados se recalcularán desde los datos fuente y no será obligatorio persistirlos.
 
 ### DT-CON-03
 
