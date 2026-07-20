@@ -33,8 +33,8 @@ Este archivo es la única fuente válida para la numeración y estado de gates.
 
 | Gate  | Condición                            | Estado      |
 | ----- | ------------------------------------ | ----------- |
-| P4-12 | Fase roja verificada                 | En curso |
-| P4-13 | Implementación funcional completada  | No iniciado |
+| P4-12 | Fase roja verificada                 | Cerrado |
+| P4-13 | Implementación funcional completada  | En curso |
 | P4-14 | Pruebas locales y regresión en verde | No iniciado |
 | P4-15 | CI en verde                          | No iniciado |
 

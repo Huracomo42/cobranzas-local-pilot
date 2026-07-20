@@ -420,3 +420,12 @@ No se registrarán resultados futuros ni acciones todavía no ejecutadas.
   - sin skills
 - Resultado: fase roja preparada y pendiente de revisión final.
 - Siguiente estado: presión y aprobación de P4-12.
+
+## Inicio de P4-13
+
+- P4-12 aprobado formalmente por el responsable humano.
+- P4-12 cerrado.
+- P4-13 iniciado.
+- Vertical slice activa: VS-01.
+- Herramienta de implementación: Claude Code.
+- Restricción: implementar únicamente VS-01 y llevar la prueba roja existente a verde.
