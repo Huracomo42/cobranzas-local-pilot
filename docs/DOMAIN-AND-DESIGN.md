@@ -588,7 +588,9 @@ La eliminación física definitiva queda fuera del flujo principal.
 
 ### 12.1 Naturaleza
 
-Un respaldo es una captura completa y coherente del estado de la aplicación.
+Un respaldo es una captura completa y coherente del estado operativo de la aplicación.
+
+No incluye el historial ni el contenido de otros respaldos.
 
 ### 12.2 Atributos conceptuales
 
@@ -612,6 +614,13 @@ Un respaldo es una captura completa y coherente del estado de la aplicación.
 * papelera;
 * metadatos;
 * versión del esquema.
+
+El respaldo no contendrá:
+
+- historial de respaldos;
+- contenido de otros respaldos;
+- copias recursivas de sí mismo;
+- información derivada que pueda recalcularse de forma segura.
 
 Los valores derivados podrán recalcularse después de restaurar.
 
@@ -653,15 +662,24 @@ Los datos restaurados deben validar la versión del esquema.
 
 ### 13.1 Estructura conceptual
 
-El estado completo contiene:
+El estado administrado por la aplicación se divide en:
 
-* versión del esquema;
-* colección de clientes;
-* colección de deudas;
-* pagos contenidos en sus deudas o relacionados por identificador;
-* reversiones;
-* metadatos operativos;
-* historial de respaldos.
+### Estado operativo respaldable
+
+- versión del esquema;
+- colección de clientes;
+- colección de deudas;
+- pagos contenidos en sus deudas o relacionados por identificador;
+- reversiones;
+- metadatos operativos.
+
+### Estado de administración de respaldos
+
+- catálogo de respaldos disponibles;
+- metadatos de retención;
+- ubicación o referencias a cada respaldo.
+
+El estado de administración de respaldos no se incluye dentro del contenido respaldado.
 
 ### 13.2 Invariantes globales
 
@@ -696,6 +714,12 @@ Los valores derivados pueden reconstruirse desde los datos fuente.
 #### INV-APP-08
 
 Un estado que no cumpla invariantes no puede sustituir silenciosamente al estado válido vigente.
+
+#### INV-APP-09
+
+Ningún respaldo puede contener directa o indirectamente otro respaldo.
+
+La restauración reemplaza únicamente el estado operativo y no el catálogo de respaldos disponibles.
 
 ## 14. Eventos de dominio
 
