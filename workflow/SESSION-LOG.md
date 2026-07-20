@@ -234,3 +234,51 @@ No se registrarán resultados futuros ni acciones todavía no ejecutadas.
 - Resultado: modelo de dominio propuesto y pendiente de presión final.
 - Decisión humana: elaboración autorizada.
 - Siguiente estado: revisar invariantes y aprobar P4-8.
+
+## Entrada P4-8 — cierre
+
+- Fecha: 19 de julio de 2026
+- Gate: P4-8
+- Contexto: aprobación del modelo de dominio
+- Actividad:
+  - revisión de entidades, agregados e invariantes;
+  - presión del diseño de respaldos;
+  - eliminación de la recursividad entre estado operativo y catálogo de respaldos;
+  - aprobación humana formal.
+- Evidencia:
+  - `docs/DOMAIN-AND-DESIGN.md`;
+  - invariantes de Cliente, Deuda, Pago, Reversión, Papelera y Respaldo;
+  - aprobación explícita del responsable humano.
+- Resultado: modelo de dominio aprobado.
+- Decisión humana: P4-8 cerrado.
+- Siguiente estado: iniciar diseño técnico.
+
+## Entrada P4-9 — en curso
+
+- Fecha: 19 de julio de 2026
+- Gate: P4-9
+- Contexto: diseño técnico conceptual
+- Actividad:
+  - definición de arquitectura lógica;
+  - separación entre presentación, aplicación, dominio, persistencia e infraestructura;
+  - diseño del flujo de comandos;
+  - definición de consistencia y escritura segura;
+  - diseño de persistencia, respaldos y migraciones;
+  - tratamiento conceptual de dinero, fechas e identificadores;
+  - diseño de accesibilidad y recuperación de errores;
+  - estrategia de pruebas por capas;
+  - reglas para futura incorporación de skills;
+  - estructura conceptual de archivos y contratos.
+- Archivos afectados:
+  - `docs/DOMAIN-AND-DESIGN.md`;
+  - `workflow/GATES.md`;
+  - `workflow/SESSION-LOG.md`.
+- Restricciones respetadas:
+  - sin selección de lenguaje;
+  - sin selección de framework;
+  - sin instalación de skills;
+  - sin implementación;
+  - sin código.
+- Resultado: diseño técnico propuesto y pendiente de presión final.
+- Decisión humana: elaboración autorizada.
+- Siguiente estado: revisar y aprobar P4-9.

@@ -971,3 +971,1193 @@ P4-8 podrá cerrarse cuando el responsable humano confirme que:
 El modelo de dominio permanece propuesto y pendiente de presión final y aprobación humana en P4-8.
 
 La sección de diseño técnico se elaborará únicamente después de cerrar P4-8.
+
+## 23. Diseño técnico conceptual — P4-9
+
+> Estado: diseño técnico propuesto para revisión y aprobación en P4-9.
+> Este diseño define responsabilidades, límites y flujos, pero no selecciona tecnologías concretas ni autoriza implementación.
+
+## 24. Objetivos del diseño
+
+El diseño técnico deberá permitir que la aplicación:
+
+* ejecute las reglas del modelo de dominio sin duplicarlas en la interfaz;
+* mantenga separados los cálculos financieros de la persistencia y la presentación;
+* preserve coherencia ante errores;
+* pueda respaldar y restaurar el estado operativo;
+* funcione con una escala de hasta 100 clientes y 500 deudas;
+* sea usable mediante teclado y lector de pantalla;
+* pueda probarse por capas;
+* permita reemplazar decisiones tecnológicas sin reescribir el dominio;
+* mantenga trazabilidad desde requisitos hasta pruebas.
+
+## 25. Arquitectura lógica
+
+La aplicación se organizará en cinco áreas lógicas:
+
+1. presentación;
+2. aplicación;
+3. dominio;
+4. persistencia;
+5. infraestructura local.
+
+Estas áreas describen responsabilidades. No obligan a utilizar procesos, paquetes o proyectos físicos separados.
+
+### 25.1 Presentación
+
+Responsable de:
+
+* mostrar información;
+* capturar intenciones del usuario;
+* gestionar navegación, foco y mensajes;
+* solicitar confirmaciones;
+* transformar entradas visuales en comandos;
+* presentar resultados y errores;
+* actualizar la interfaz después de cada operación.
+
+No será responsable de:
+
+* calcular saldos;
+* determinar estados de deuda;
+* decidir si una operación es válida;
+* modificar directamente el almacenamiento;
+* generar identificadores financieros;
+* interpretar reglas de negocio.
+
+### 25.2 Aplicación
+
+Responsable de coordinar cada caso de uso.
+
+Sus funciones incluyen:
+
+* recibir comandos;
+* cargar el estado necesario;
+* solicitar confirmación cuando corresponda;
+* invocar operaciones del dominio;
+* coordinar persistencia;
+* coordinar respaldos;
+* devolver un resultado explícito;
+* traducir errores internos a resultados comprensibles para presentación.
+
+No contiene reglas financieras fundamentales que pertenezcan al dominio.
+
+### 25.3 Dominio
+
+Responsable de:
+
+* entidades;
+* objetos de valor;
+* invariantes;
+* cálculos financieros;
+* estados derivados;
+* comandos conceptuales;
+* eventos de dominio;
+* validaciones de negocio.
+
+El dominio:
+
+* no conoce la interfaz;
+* no conoce el mecanismo físico de almacenamiento;
+* no conoce detalles del entorno de ejecución;
+* no realiza operaciones de entrada o salida directamente.
+
+### 25.4 Persistencia
+
+Responsable de:
+
+* leer el estado operativo;
+* guardar el estado operativo;
+* validar su estructura;
+* administrar versiones del esquema;
+* escribir cambios de forma segura;
+* detectar datos corruptos o incompletos;
+* administrar el catálogo de respaldos;
+* restaurar estados validados.
+
+No determina si un pago es válido ni calcula estados de deuda.
+
+### 25.5 Infraestructura local
+
+Responsable de las capacidades dependientes del entorno:
+
+* lectura y escritura local;
+* generación de fecha y hora actual;
+* generación de identificadores;
+* gestión física de respaldos;
+* registro técnico de errores;
+* mecanismo de inicio local;
+* interacción con capacidades del navegador o sistema cuando corresponda.
+
+## 26. Regla de dependencias
+
+Las dependencias conceptuales seguirán esta dirección:
+
+`Presentación → Aplicación → Dominio`
+
+La persistencia será accedida mediante contratos definidos para la aplicación.
+
+La infraestructura implementará capacidades requeridas por aplicación y persistencia.
+
+### DT-DEP-01
+
+El dominio no dependerá de presentación, persistencia ni infraestructura.
+
+### DT-DEP-02
+
+La presentación no accederá directamente al almacenamiento.
+
+### DT-DEP-03
+
+Los cálculos financieros tendrán una única implementación en la capa de dominio.
+
+### DT-DEP-04
+
+Las reglas de validación no deberán duplicarse de manera contradictoria entre capas.
+
+La interfaz podrá efectuar validaciones tempranas para mejorar la experiencia, pero el dominio volverá a validar antes de aceptar una operación.
+
+## 27. Flujo general de un comando
+
+Toda operación iniciada por el usuario seguirá el flujo conceptual:
+
+1. el usuario ejecuta una acción;
+2. presentación captura y normaliza la entrada;
+3. presentación crea una solicitud de comando;
+4. aplicación valida la forma mínima de la solicitud;
+5. aplicación obtiene el estado requerido;
+6. si corresponde, presentación muestra una confirmación;
+7. aplicación invoca el dominio;
+8. dominio valida invariantes;
+9. dominio produce un nuevo estado y eventos;
+10. aplicación solicita persistencia segura;
+11. persistencia confirma o rechaza la escritura;
+12. aplicación coordina el respaldo exigido;
+13. presentación recibe el resultado;
+14. presentación actualiza datos, foco y mensajes.
+
+### DT-FLU-01
+
+La interfaz solo mostrará éxito cuando la persistencia confirme el cambio.
+
+### DT-FLU-02
+
+Si la persistencia falla, el estado visible deberá conservar o recuperar la última versión confirmada.
+
+### DT-FLU-03
+
+La aplicación devolverá resultados explícitos y no dependerá de excepciones silenciosas.
+
+## 28. Unidad de cambio y consistencia
+
+### 28.1 Cambio lógico
+
+Cada comando de escritura constituye una unidad lógica indivisible.
+
+Ejemplos:
+
+* registrar un pago;
+* revertir un pago;
+* eliminar una deuda;
+* restaurar una deuda;
+* archivar un cliente;
+* restaurar un respaldo.
+
+### 28.2 Principio de atomicidad
+
+Un cambio deberá quedar:
+
+* completamente aplicado; o
+* completamente rechazado.
+
+No podrá persistirse un estado parcial.
+
+### 28.3 Secuencia de escritura segura
+
+La persistencia deberá seguir conceptualmente esta secuencia:
+
+1. construir el estado candidato;
+2. validar invariantes;
+3. serializar o preparar el estado candidato;
+4. escribir en una ubicación temporal o equivalente;
+5. verificar que el contenido sea legible;
+6. sustituir el estado confirmado;
+7. conservar evidencia del resultado;
+8. actualizar la interfaz.
+
+El mecanismo concreto se definirá en la selección tecnológica.
+
+### DT-CON-01
+
+Un fallo durante la escritura no debe destruir el último estado válido.
+
+### DT-CON-02
+
+Los eventos y cálculos asociados a un comando se persisten junto con el cambio principal.
+
+### DT-CON-03
+
+La eliminación de una deuda y la exclusión de sus pagos de los cálculos forman una sola unidad lógica.
+
+### DT-CON-04
+
+La reversión de un pago y el recálculo de deuda y saldo a favor forman una sola unidad lógica.
+
+## 29. Persistencia del estado operativo
+
+### 29.1 Fuente de verdad
+
+La fuente persistente de verdad contendrá únicamente datos fuente y metadatos necesarios.
+
+Incluirá:
+
+* versión del esquema;
+* clientes;
+* deudas;
+* pagos;
+* reversiones;
+* marcas de archivo;
+* marcas de papelera;
+* fechas de creación y modificación;
+* identificadores;
+* metadatos operativos indispensables.
+
+### 29.2 Datos derivados
+
+No será obligatorio persistir como fuente de verdad:
+
+* saldo pendiente;
+* estado de deuda;
+* total pendiente;
+* cantidad de vencidas;
+* saldo a favor;
+* monto aplicado;
+* monto excedente.
+
+Estos valores podrán almacenarse como ayudas de rendimiento únicamente si:
+
+* pueden reconstruirse;
+* se validan contra los datos fuente;
+* nunca sustituyen al cálculo del dominio.
+
+### 29.3 Carga inicial
+
+Al iniciar, la aplicación deberá:
+
+1. localizar el estado operativo;
+2. verificar que pueda leerse;
+3. validar la versión del esquema;
+4. validar referencias e invariantes;
+5. recalcular valores derivados;
+6. mostrar el estado operativo;
+7. informar cualquier recuperación o degradación.
+
+### DT-PER-01
+
+Un estado inválido no será aceptado silenciosamente.
+
+### DT-PER-02
+
+La ausencia de datos iniciales deberá producir un estado vacío válido.
+
+### DT-PER-03
+
+Los datos reales del usuario no se incluirán en el repositorio.
+
+### DT-PER-04
+
+Los datos de demostración deberán ser ficticios y separables de los datos operativos.
+
+## 30. Versionado y migración del esquema
+
+### 30.1 Versión explícita
+
+Todo estado persistido y todo respaldo incluirán una versión de esquema.
+
+### 30.2 Compatibilidad
+
+La carga deberá distinguir entre:
+
+* versión vigente;
+* versión anterior compatible;
+* versión migrable;
+* versión desconocida;
+* contenido corrupto.
+
+### 30.3 Migración
+
+Una migración deberá:
+
+1. conservar el contenido original hasta confirmar el resultado;
+2. transformar una versión conocida;
+3. validar referencias;
+4. validar invariantes;
+5. recalcular derivados;
+6. registrar la nueva versión;
+7. crear respaldo cuando sea posible;
+8. rechazar el resultado si alguna validación falla.
+
+### DT-MIG-01
+
+No se migrarán automáticamente versiones desconocidas.
+
+### DT-MIG-02
+
+Una migración fallida no sustituirá el estado anterior.
+
+### DT-MIG-03
+
+Las migraciones deberán ser deterministas y comprobables con pruebas.
+
+### DT-MIG-04
+
+La estrategia concreta de migración se documentará antes de modificar el esquema después de la primera versión operativa.
+
+## 31. Diseño de respaldos
+
+### 31.1 Tipos conceptuales
+
+Se reconocen:
+
+* respaldo por cambio relevante;
+* respaldo diario;
+* respaldo previo a restauración;
+* respaldo manual, si se incorpora posteriormente.
+
+### 31.2 Cambio relevante
+
+Como mínimo, deberán generar o solicitar respaldo:
+
+* registrar pago;
+* revertir pago;
+* eliminar deuda;
+* restaurar deuda;
+* eliminar cliente sin historial;
+* restaurar cliente;
+* restaurar respaldo;
+* migrar el esquema.
+
+La agrupación o optimización física podrá definirse después, siempre que no se pierda recuperabilidad razonable.
+
+### 31.3 Catálogo
+
+El catálogo de respaldos mantendrá:
+
+* identificador;
+* fecha y hora;
+* motivo;
+* versión del esquema;
+* estado de integridad;
+* referencia física;
+* tamaño o información equivalente, si resulta útil.
+
+### 31.4 Retención
+
+Se conservarán hasta cinco respaldos automáticos válidos.
+
+La eliminación del respaldo más antiguo solo ocurrirá después de confirmar que el nuevo respaldo es válido.
+
+### DT-BKP-01
+
+Un respaldo no contiene otros respaldos.
+
+### DT-BKP-02
+
+La creación fallida de un respaldo no debe borrar respaldos válidos anteriores.
+
+### DT-BKP-03
+
+La restauración reemplaza únicamente el estado operativo.
+
+### DT-BKP-04
+
+Antes de restaurar se intentará preservar el estado vigente.
+
+### DT-BKP-05
+
+Después de restaurar se validará el estado y se recalcularán todos los derivados.
+
+### DT-BKP-06
+
+Si la restauración falla, la aplicación conservará el último estado válido.
+
+## 32. Manejo técnico conceptual del dinero
+
+### 32.1 Representación
+
+Los importes no deberán depender de aritmética binaria que pueda introducir errores visibles de redondeo.
+
+La selección tecnológica deberá elegir una representación que garantice precisión exacta de dos decimales.
+
+Alternativas admisibles conceptualmente:
+
+* unidades monetarias mínimas enteras;
+* tipo decimal exacto;
+* estructura de dinero validada.
+
+No se selecciona todavía una alternativa.
+
+### 32.2 Objeto conceptual Dinero
+
+Un valor monetario estará compuesto por:
+
+* cantidad;
+* moneda.
+
+### DT-DIN-01
+
+No se suman importes de monedas diferentes.
+
+### DT-DIN-02
+
+Toda operación monetaria conserva dos decimales como máximo.
+
+### DT-DIN-03
+
+No se utilizarán aproximaciones de coma flotante sin una estrategia explícita de corrección y prueba.
+
+### DT-DIN-04
+
+Los formateadores visuales no alteran el valor interno.
+
+### DT-DIN-05
+
+La entrada monetaria se normaliza antes de llegar al dominio.
+
+### DT-DIN-06
+
+La presentación mostrará siempre la moneda junto al monto cuando exista riesgo de ambigüedad.
+
+## 33. Manejo técnico conceptual de fechas
+
+### 33.1 Fecha civil
+
+Las fechas de pago y vencimiento se tratarán como fechas civiles, sin hora asociada.
+
+### 33.2 Marca temporal
+
+Las fechas de creación, modificación, reversión y respaldo se tratarán como marcas temporales.
+
+### DT-FEC-01
+
+La fecha de vencimiento no debe desplazarse por conversiones de zona horaria.
+
+### DT-FEC-02
+
+La fecha de pago no podrá ser posterior a la fecha civil actual del entorno local.
+
+### DT-FEC-03
+
+“Vence hoy” se evalúa comparando fechas civiles.
+
+### DT-FEC-04
+
+Las marcas temporales deberán conservar un orden determinista.
+
+### DT-FEC-05
+
+La capa de infraestructura proveerá la fecha actual mediante una abstracción sustituible en pruebas.
+
+### DT-FEC-06
+
+Las pruebas no dependerán directamente del reloj real.
+
+## 34. Identificadores y orden determinista
+
+### 34.1 Identificadores
+
+Cada entidad tendrá un identificador:
+
+* único;
+* estable;
+* no reutilizable;
+* independiente de datos editables.
+
+### 34.2 Orden de pagos
+
+Cuando sea necesario reconstruir cálculos, los pagos válidos se ordenarán por:
+
+1. marca temporal de registro;
+2. identificador como desempate.
+
+### DT-ID-01
+
+Dos operaciones no deben producir resultados ambiguos por compartir fecha o monto.
+
+### DT-ID-02
+
+La generación concreta de identificadores queda diferida a la selección tecnológica.
+
+## 35. Presentación y estado de interfaz
+
+### 35.1 Estado visible
+
+La presentación mantendrá únicamente el estado necesario para:
+
+* formulario actual;
+* filtros;
+* ordenamiento;
+* selección;
+* mensajes;
+* confirmaciones;
+* foco;
+* vistas derivadas.
+
+La fuente financiera de verdad seguirá siendo el estado gestionado por aplicación y dominio.
+
+### 35.2 Actualización
+
+Después de un comando exitoso, la interfaz deberá:
+
+1. obtener el resultado confirmado;
+2. actualizar la vista afectada;
+3. recalcular o recibir resúmenes;
+4. mostrar un mensaje comprensible;
+5. mover el foco a un destino lógico.
+
+### 35.3 Evitar estados obsoletos
+
+No deberán coexistir copias independientes del mismo saldo que puedan divergir.
+
+### DT-UI-01
+
+La presentación no modificará localmente un saldo antes de confirmar el resultado del dominio y persistencia.
+
+### DT-UI-02
+
+Los filtros y ordenamientos no alteran los datos fuente.
+
+### DT-UI-03
+
+Cerrar o cancelar una confirmación no ejecuta el comando.
+
+### DT-UI-04
+
+Los formularios conservan la información necesaria cuando una validación corregible falla.
+
+## 36. Confirmaciones
+
+### 36.1 Acciones financieras
+
+Antes de registrar, revertir o eliminar un movimiento financiero, la confirmación mostrará:
+
+* cliente;
+* deuda;
+* monto;
+* moneda;
+* fecha;
+* efecto sobre saldo pendiente;
+* efecto sobre saldo a favor;
+* consecuencias adicionales.
+
+### 36.2 Acciones destructivas o estructurales
+
+También requerirán confirmación:
+
+* eliminar cliente;
+* archivar cliente;
+* reactivar cliente;
+* eliminar deuda;
+* restaurar elemento;
+* restaurar respaldo.
+
+### DT-CNF-01
+
+La confirmación se genera a partir del estado vigente y no de información obsoleta del formulario.
+
+### DT-CNF-02
+
+Después de confirmar, el comando vuelve a validar las precondiciones.
+
+### DT-CNF-03
+
+Una confirmación no se reutiliza para otra operación.
+
+## 37. Accesibilidad técnica
+
+La accesibilidad se incorporará como parte de la estructura y no como revisión tardía.
+
+### 37.1 Navegación
+
+La aplicación deberá permitir:
+
+* recorrer controles mediante teclado;
+* activar acciones sin ratón;
+* cerrar diálogos mediante teclado;
+* mantener un orden lógico de tabulación;
+* evitar trampas de foco.
+
+### 37.2 Foco
+
+Después de cada acción:
+
+* al abrir un diálogo, el foco entra en él;
+* al cerrarlo, el foco vuelve al control originador o a un destino lógico;
+* después de crear, editar o restaurar, el foco se mueve a la confirmación o elemento relevante;
+* después de eliminar, el foco se mueve al siguiente elemento disponible o al encabezado de la lista.
+
+### 37.3 Semántica
+
+La presentación deberá ofrecer:
+
+* etiquetas asociadas;
+* encabezados jerárquicos;
+* nombres accesibles;
+* estados comunicados textualmente;
+* tablas o listas con estructura comprensible;
+* mensajes anunciables;
+* botones con propósito identificable.
+
+### 37.4 Mensajes
+
+Los mensajes deberán distinguir:
+
+* éxito;
+* advertencia;
+* error de validación;
+* error de integridad;
+* error de persistencia;
+* acción cancelada.
+
+### DT-ACC-01
+
+El color no será el único indicador de estado.
+
+### DT-ACC-02
+
+Los mensajes dinámicos críticos deberán ser detectables por tecnologías de asistencia.
+
+### DT-ACC-03
+
+Los diálogos deberán tener título, descripción y límites de foco adecuados.
+
+### DT-ACC-04
+
+La deuda vencida deberá identificarse mediante texto además de estilo visual.
+
+### DT-ACC-05
+
+Las pruebas incluirán recorridos completos solo con teclado.
+
+## 38. Tratamiento de errores
+
+### 38.1 Categorías
+
+El sistema distinguirá:
+
+* error de entrada;
+* error de dominio;
+* error de confirmación;
+* error de referencia;
+* error de persistencia;
+* error de integridad;
+* error de respaldo;
+* error de restauración;
+* error inesperado.
+
+### 38.2 Resultado estructurado
+
+Cada resultado de operación deberá poder expresar:
+
+* éxito o rechazo;
+* código o categoría;
+* mensaje para usuario;
+* detalles técnicos internos;
+* campos afectados;
+* acción de recuperación;
+* eventos producidos.
+
+### DT-ERR-01
+
+Los detalles técnicos no reemplazarán el mensaje comprensible para el usuario.
+
+### DT-ERR-02
+
+Los errores no deberán dejar la interfaz mostrando un éxito inexistente.
+
+### DT-ERR-03
+
+Un error inesperado deberá conservar el último estado confirmado.
+
+### DT-ERR-04
+
+Los errores de corrupción deberán impedir la escritura sobre el estado válido.
+
+### DT-ERR-05
+
+Los registros técnicos no deberán incluir innecesariamente información sensible.
+
+## 39. Recuperación ante corrupción
+
+Al detectar que el estado principal no puede validarse:
+
+1. no se sobrescribe;
+2. se informa el problema;
+3. se consulta el catálogo de respaldos;
+4. se identifican respaldos válidos;
+5. se ofrece restauración controlada;
+6. se conserva evidencia del estado problemático cuando sea seguro;
+7. se registra el resultado.
+
+### DT-REC-01
+
+La aplicación no restaurará automáticamente un respaldo sin informar al usuario.
+
+### DT-REC-02
+
+El usuario deberá conocer cuál respaldo se utilizará y su fecha.
+
+### DT-REC-03
+
+Si no existe respaldo válido, la aplicación no inventará datos ni iniciará silenciosamente un estado vacío sobre los archivos existentes.
+
+## 40. Seguridad y privacidad local
+
+Aunque la aplicación sea local, deberá aplicar principios básicos:
+
+* no incluir credenciales embebidas;
+* no transmitir datos sin una decisión explícita futura;
+* no incluir datos operativos en Git;
+* limitar datos técnicos registrados;
+* validar todas las entradas;
+* tratar archivos restaurados como contenido no confiable;
+* impedir interpretación insegura de contenido almacenado.
+
+### DT-SEG-01
+
+La aplicación no dependerá de conexión externa para las funciones principales.
+
+### DT-SEG-02
+
+La restauración validará estructura y tipos antes de aceptar contenido.
+
+### DT-SEG-03
+
+Los textos ingresados por usuarios se mostrarán como datos y no como contenido ejecutable.
+
+### DT-SEG-04
+
+Las rutas y mecanismos concretos de almacenamiento deberán evitar exposición accidental razonable.
+
+## 41. Rendimiento
+
+Para la escala objetivo, la prioridad será claridad y consistencia antes que optimizaciones prematuras.
+
+### 41.1 Operaciones esperadas
+
+Con hasta 100 clientes y 500 deudas:
+
+* la carga deberá ser perceptiblemente rápida;
+* los filtros deberán responder de forma inmediata para el usuario;
+* los cálculos podrán reconstruirse al cargar;
+* registrar y consultar una deuda no deberá requerir procesos largos;
+* identificar vencidas y total pendiente deberá tomar menos de diez segundos de interacción humana.
+
+### DT-REN-01
+
+No se introducirán caches persistentes complejos sin evidencia de necesidad.
+
+### DT-REN-02
+
+Toda optimización deberá conservar una ruta de reconstrucción desde datos fuente.
+
+### DT-REN-03
+
+Las pruebas de rendimiento utilizarán el volumen máximo previsto y una cantidad razonable de pagos.
+
+## 42. Estrategia de pruebas
+
+Las pruebas se organizarán por responsabilidad.
+
+### 42.1 Pruebas de dominio
+
+Cubrirán:
+
+* validación de entidades;
+* dinero;
+* pagos parciales;
+* pagos exactos;
+* excedentes;
+* múltiples pagos;
+* reversiones;
+* estados de deuda;
+* archivo;
+* papelera;
+* restauración;
+* invariantes globales.
+
+Serán independientes de interfaz y almacenamiento físico.
+
+### 42.2 Pruebas de aplicación
+
+Cubrirán:
+
+* coordinación de comandos;
+* confirmaciones;
+* persistencia exitosa;
+* persistencia fallida;
+* respaldo requerido;
+* restauración;
+* traducción de errores;
+* secuencia de efectos.
+
+### 42.3 Pruebas de persistencia
+
+Cubrirán:
+
+* guardar y cargar;
+* escritura incompleta;
+* datos corruptos;
+* referencias huérfanas;
+* versiones de esquema;
+* migraciones;
+* retención de respaldos;
+* restauración.
+
+### 42.4 Pruebas de presentación
+
+Cubrirán:
+
+* formularios;
+* errores;
+* filtros;
+* ordenamiento;
+* confirmaciones;
+* mensajes;
+* foco;
+* navegación por teclado;
+* nombres accesibles;
+* actualización después de comandos.
+
+### 42.5 Pruebas end-to-end
+
+Cubrirán al menos:
+
+1. crear cliente;
+2. crear deuda;
+3. registrar pago parcial;
+4. completar pago;
+5. registrar excedente;
+6. revertir pago;
+7. archivar y reactivar cliente;
+8. eliminar y restaurar deuda;
+9. filtrar vencidas;
+10. observar totales por moneda;
+11. crear respaldo;
+12. restaurar respaldo.
+
+### 42.6 Pruebas de regresión
+
+Cada defecto corregido deberá producir una prueba que falle antes de la corrección y pase después.
+
+### DT-TST-01
+
+El reloj y la generación de identificadores serán sustituibles en pruebas.
+
+### DT-TST-02
+
+Los casos financieros utilizarán montos exactos y resultados explícitos.
+
+### DT-TST-03
+
+Las pruebas no dependerán de datos personales reales.
+
+### DT-TST-04
+
+Las pruebas end-to-end no sustituirán las pruebas de dominio.
+
+## 43. Integración futura de skills
+
+Los skills frontend se utilizarán como capacidades de apoyo, no como autoridad sobre requisitos o dominio.
+
+### 43.1 Ámbitos posibles
+
+Podrán apoyar:
+
+* sistema visual;
+* composición de pantallas;
+* jerarquía;
+* formularios;
+* tablas;
+* estados vacíos;
+* accesibilidad;
+* microinteracciones;
+* revisión de experiencia;
+* consistencia visual.
+
+### 43.2 Restricciones
+
+Los skills no podrán:
+
+* modificar requisitos congelados sin aprobación;
+* cambiar reglas financieras;
+* introducir dependencias sin evaluación;
+* reemplazar la revisión humana;
+* ocultar decisiones de diseño;
+* incorporar código no comprendido o no probado.
+
+### 43.3 Trazabilidad
+
+Cuando se utilice un skill, deberá registrarse:
+
+* nombre;
+* fuente;
+* versión o referencia;
+* objetivo;
+* instrucciones relevantes;
+* artefactos producidos;
+* cambios aceptados;
+* cambios rechazados;
+* evaluación final.
+
+### DT-SKL-01
+
+La selección e instalación de skills no pertenece a P4-9.
+
+### DT-SKL-02
+
+La arquitectura deberá permitir que el diseño visual evolucione sin modificar el dominio.
+
+### DT-SKL-03
+
+El resultado de un skill será revisado contra requisitos, accesibilidad y consistencia.
+
+## 44. Estructura conceptual de archivos
+
+La estructura definitiva dependerá de la tecnología seleccionada, pero deberá conservar responsabilidades equivalentes a:
+
+```text
+src/
+  domain/
+    entities/
+    value-objects/
+    rules/
+    calculations/
+    errors/
+
+  application/
+    commands/
+    use-cases/
+    results/
+    ports/
+
+  presentation/
+    screens/
+    components/
+    forms/
+    accessibility/
+    state/
+
+  persistence/
+    repositories/
+    schema/
+    migrations/
+    backups/
+    validation/
+
+  infrastructure/
+    clock/
+    identifiers/
+    storage/
+    logging/
+
+tests/
+  domain/
+  application/
+  persistence/
+  presentation/
+  end-to-end/
+```
+
+Esta estructura es conceptual y no constituye todavía una decisión de lenguaje, framework o sistema de módulos.
+
+### DT-EST-01
+
+La estructura final deberá permitir localizar rápidamente:
+
+* reglas financieras;
+* casos de uso;
+* componentes visuales;
+* persistencia;
+* pruebas.
+
+### DT-EST-02
+
+No se concentrará toda la aplicación en un único archivo si ello impide revisión, prueba o mantenimiento.
+
+### DT-EST-03
+
+Tampoco se dividirá artificialmente en una cantidad excesiva de archivos sin responsabilidad clara.
+
+## 45. Contratos conceptuales principales
+
+La aplicación deberá contar con contratos equivalentes a:
+
+### Repositorio de estado
+
+* cargar estado;
+* guardar estado candidato;
+* validar estado;
+* informar versión.
+
+### Administrador de respaldos
+
+* crear respaldo;
+* listar respaldos;
+* validar respaldo;
+* restaurar respaldo;
+* aplicar retención.
+
+### Reloj
+
+* obtener fecha civil actual;
+* obtener marca temporal actual.
+
+### Generador de identificadores
+
+* generar identificador único.
+
+### Registro técnico
+
+* registrar información;
+* registrar advertencia;
+* registrar error sin exponer datos innecesarios.
+
+Los nombres y firmas concretas se definirán durante implementación.
+
+## 46. Decisiones arquitectónicas registrables
+
+Las decisiones técnicas relevantes deberán documentarse mediante registros breves de decisión.
+
+Como mínimo se registrarán después:
+
+* representación de dinero;
+* almacenamiento local;
+* formato de datos;
+* estrategia de escritura segura;
+* mecanismo de respaldo;
+* manejo de fechas;
+* estrategia de interfaz;
+* herramientas de prueba;
+* selección de skills;
+* ejecución local.
+
+Cada decisión deberá incluir:
+
+* contexto;
+* alternativas;
+* decisión;
+* razones;
+* consecuencias;
+* riesgos;
+* posibilidad de reversión.
+
+## 47. Decisiones todavía abiertas
+
+P4-9 no decide:
+
+* lenguaje;
+* framework;
+* librería visual;
+* formato físico de persistencia;
+* navegador objetivo definitivo;
+* servidor local o ausencia de servidor;
+* herramienta de pruebas;
+* mecanismo de empaquetado;
+* sistema de estilos;
+* skills concretos;
+* mecanismo físico de respaldo;
+* formato de identificadores.
+
+Estas elecciones deberán evaluarse después contra este diseño.
+
+## 48. Casos de presión técnica
+
+### 48.1 Falla al guardar un pago
+
+Resultado requerido:
+
+* el pago no se presenta como confirmado;
+* el estado anterior permanece válido;
+* no se muestra saldo modificado;
+* se informa el error;
+* puede reintentarse.
+
+### 48.2 Falla al crear respaldo después de un cambio
+
+El diseño tecnológico deberá definir una política explícita.
+
+No podrá:
+
+* fingir que el respaldo fue creado;
+* eliminar respaldos anteriores;
+* perder el cambio confirmado sin informar.
+
+La política final deberá equilibrar persistencia y recuperabilidad.
+
+### 48.3 Dos pagos con la misma fecha
+
+El resultado se mantiene determinista mediante la marca de registro y el identificador.
+
+### 48.4 Restauración de respaldo antiguo
+
+* se valida versión;
+* se migra cuando sea compatible;
+* se rechaza cuando sea desconocida;
+* se conserva el estado vigente hasta confirmar el nuevo estado.
+
+### 48.5 Datos principales corruptos
+
+* no se sobrescriben;
+* se informa;
+* se ofrecen respaldos válidos;
+* no se crea silenciosamente un estado vacío.
+
+### 48.6 Deuda eliminada con pagos
+
+* deuda, pagos y reversiones mantienen relación;
+* dejan de afectar cálculos;
+* pueden restaurarse conjuntamente.
+
+### 48.7 Cliente archivado con deudas pendientes
+
+* conserva sus deudas;
+* las deudas siguen apareciendo en consultas y totales;
+* no puede recibir nuevas deudas hasta reactivarse.
+
+### 48.8 Cambio de día con aplicación abierta
+
+El diseño de presentación deberá recalcular estados sensibles a la fecha:
+
+* al iniciar;
+* al recuperar el foco después de un periodo;
+* antes de operaciones relevantes;
+* mediante otro mecanismo equivalente.
+
+No se permitirá que una deuda permanezca indefinidamente con un estado temporal obsoleto.
+
+## 49. Criterios de aprobación de P4-9
+
+P4-9 podrá cerrarse cuando el responsable humano confirme que:
+
+* las capas y responsabilidades están definidas;
+* la dirección de dependencias protege el dominio;
+* los comandos tienen un flujo claro;
+* las escrituras se tratan como unidades indivisibles;
+* el estado operativo tiene una fuente de verdad;
+* los valores derivados pueden reconstruirse;
+* respaldo y restauración no son recursivos;
+* existe una estrategia conceptual de versionado y migración;
+* dinero y fechas tienen restricciones técnicas explícitas;
+* la interfaz no duplica reglas financieras;
+* la accesibilidad forma parte del diseño;
+* los errores y la corrupción tienen rutas de recuperación;
+* la estrategia de pruebas cubre todas las capas;
+* los skills quedan subordinados a requisitos y revisión;
+* las decisiones tecnológicas permanecen abiertas;
+* no se escribió código.
+
+## 50. Estado de P4-9
+
+El diseño técnico permanece propuesto y pendiente de presión final y aprobación humana.
+
+La selección tecnológica, instalación de skills e implementación permanecen prohibidas hasta cerrar los gates correspondientes.
