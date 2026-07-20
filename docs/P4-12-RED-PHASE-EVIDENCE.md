@@ -40,3 +40,19 @@ Crear un estado operativo vacío y válido con:
 Test Files  1 failed (1)
 Tests       1 failed (1)
 Error: Not implemented: VS-01
+```
+
+## Interpretación
+
+La prueba:
+
+- se descubre;
+- se importa;
+- se ejecuta;
+- falla por comportamiento ausente;
+- no falla por configuración del runner;
+- no falla por un error de resolución de módulos.
+
+## Restricción respetada
+
+VS-01 todavía no ha sido implementada.
