@@ -16,8 +16,8 @@ Este archivo es la única fuente válida para la numeración y estado de gates.
 
 | Gate | Condición                                 | Estado      |
 | ---- | ----------------------------------------- | ----------- |
-| P4-5 | Problema, usuario y contexto investigados | En curso |
-| P4-6 | Project Charter aprobado                  | No iniciado |
+| P4-5 | Problema, usuario y contexto investigados | Cerrado |
+| P4-6 | Project Charter aprobado | En curso |
 | P4-7 | Requisitos presionados y congelados       | No iniciado |
 
 ## Ingeniería
