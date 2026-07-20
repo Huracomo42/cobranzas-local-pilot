@@ -282,3 +282,52 @@ No se registrarán resultados futuros ni acciones todavía no ejecutadas.
 - Resultado: diseño técnico propuesto y pendiente de presión final.
 - Decisión humana: elaboración autorizada.
 - Siguiente estado: revisar y aprobar P4-9.
+
+## Entrada P4-9 — cierre
+
+- Fecha: 20 de julio de 2026
+- Gate: P4-9
+- Contexto: aprobación del diseño técnico
+- Actividad:
+  - revisión de arquitectura lógica;
+  - presión del flujo de restauración;
+  - diferenciación entre datos fuente y valores derivados;
+  - aprobación humana formal.
+- Evidencia:
+  - `docs/DOMAIN-AND-DESIGN.md`;
+  - flujo especializado de restauración;
+  - persistencia y respaldo conceptualmente definidos;
+  - aprobación explícita del responsable humano.
+- Resultado: diseño técnico aprobado.
+- Decisión humana: P4-9 cerrado.
+- Siguiente estado: preparar vertical slices, backlog y plan de pruebas.
+
+## Entrada P4-10 — en curso
+
+- Fecha: 20 de julio de 2026
+- Gate: P4-10
+- Contexto: planificación de implementación
+- Actividad:
+  - definición de 14 vertical slices;
+  - priorización del backlog;
+  - establecimiento de dependencias;
+  - definición de criterios de aceptación;
+  - diseño de fase roja;
+  - planificación de pruebas por capas;
+  - definición de datos ficticios;
+  - definición de prueba de volumen;
+  - establecimiento de Definition of Ready y Definition of Done;
+  - trazabilidad hacia requisitos.
+- Archivos afectados:
+  - `docs/IMPLEMENTATION-PLAN.md`;
+  - `workflow/GATES.md`;
+  - `workflow/SESSION-LOG.md`.
+- Restricciones respetadas:
+  - sin selección tecnológica;
+  - sin instalación de skills;
+  - sin dependencias;
+  - sin pruebas ejecutables;
+  - sin código de producto.
+- Resultado: plan propuesto y pendiente de presión final.
+- Decisión humana: elaboración autorizada.
+- Siguiente estado: revisar y aprobar P4-10.
