@@ -111,7 +111,7 @@ El orden propuesto es:
 7. VS-07 — Reversión de pagos;
 8. VS-08 — Archivo y reactivación de clientes;
 9. VS-09 — Papelera y restauración;
-10. VS-10 — Persistencia segura y recuperación;
+10. VS-10 — Endurecimiento de persistencia y recuperación;
 11. VS-11 — Respaldos y restauración;
 12. VS-12 — Filtros, ordenamiento y búsqueda operativa;
 13. VS-13 — Accesibilidad y navegación completa;
@@ -143,6 +143,24 @@ El orden puede ajustarse durante P4-11 únicamente si:
 | VS-12 | VS-03 y VS-04               |
 | VS-13 | VS-02 a VS-12               |
 | VS-14 | Todas las anteriores        |
+
+### 6.1 Persistencia incremental
+
+La persistencia no comienza en VS-10.
+
+Desde VS-01 se implementará el mínimo vertical de carga y guardado requerido por cada slice. Cada capacidad incorporada deberá sobrevivir un reinicio antes de considerarse terminada.
+
+VS-10 consolidará y endurecerá esa persistencia mediante:
+
+- escritura segura;
+- sustitución controlada;
+- simulación de fallos;
+- detección de corrupción;
+- validación integral;
+- recuperación del último estado válido;
+- compatibilidad y versionado del esquema.
+
+Por tanto, VS-10 no reemplaza la persistencia desarrollada en las slices anteriores: la somete a pruebas integrales y completa sus mecanismos de recuperación.
 
 ## 7. VS-01 — Estado vacío y arranque seguro
 
@@ -797,31 +815,37 @@ No se restaura una deuda si su cliente no existe o está en papelera.
 * sin referencias huérfanas;
 * regresiones en verde.
 
-## 16. VS-10 — Persistencia segura y recuperación
+## 16. VS-10 — Endurecimiento de persistencia y recuperación
 
 ### 16.1 Objetivo
 
-Garantizar que las operaciones confirmadas sobrevivan reinicios y que las fallas no destruyan el último estado válido.
+Endurecer la persistencia incremental desarrollada desde VS-01 y garantizar que los fallos, la corrupción o las versiones incompatibles no destruyan el último estado válido.
 
 ### 16.2 Alcance
 
 Incluye:
 
-* carga y guardado;
-* escritura segura;
-* estado candidato;
-* validación;
-* sustitución controlada;
-* detección de corrupción;
-* versión del esquema;
-* estado vacío válido;
-* separación entre datos operativos y demostración.
+- revisión integral de la carga y guardado desarrollados en las slices anteriores;
+- escritura segura;
+- estado candidato;
+- validación antes de sustitución;
+- sustitución controlada;
+- simulación de escritura interrumpida;
+- detección de corrupción;
+- validación de referencias e invariantes globales;
+- versión del esquema;
+- rechazo de versiones desconocidas;
+- reconstrucción de valores derivados;
+- recuperación del último estado válido;
+- separación entre datos operativos y datos de demostración.
+
+No incluye crear por primera vez la persistencia básica de clientes, deudas o pagos, porque esa persistencia forma parte de sus respectivas vertical slices.
 
 ### 16.3 Criterios de aceptación
 
 #### CA-VS10-01
 
-Toda operación confirmada permanece después de reiniciar.
+Todas las operaciones implementadas en VS-01 a VS-09 permanecen después de reiniciar y superan la validación integral del estado.
 
 #### CA-VS10-02
 
