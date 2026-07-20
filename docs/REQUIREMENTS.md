@@ -86,15 +86,19 @@ El nombre:
 
 El usuario podrá editar los datos de un cliente activo o archivado.
 
-### RF-CLI-04 — Eliminar cliente sin deudas
+### RF-CLI-04 — Eliminar cliente sin historial de deudas
 
-Un cliente que nunca haya tenido deudas o que no conserve deudas activas, archivadas o en papelera podrá enviarse a la papelera.
+Solo podrá enviarse a la papelera un cliente que nunca haya tenido deudas registradas.
 
-### RF-CLI-05 — Archivar cliente con deudas
+La acción requerirá confirmación.
 
-Un cliente que tenga o haya tenido deudas no podrá eliminarse directamente.
+### RF-CLI-05 — Archivar cliente con historial de deudas
 
-Deberá archivarse para preservar su historial.
+Todo cliente que tenga o haya tenido al menos una deuda deberá conservarse para mantener la trazabilidad.
+
+No podrá enviarse a la papelera, aunque todas sus deudas estén pagadas o hayan sido eliminadas.
+
+Podrá archivarse y posteriormente reactivarse.
 
 ### RF-CLI-06 — Restricción del cliente archivado
 
@@ -294,6 +298,10 @@ La fecha del pago será obligatoria.
 
 La aplicación propondrá por defecto la fecha actual, pero el usuario podrá modificarla antes de guardar.
 
+La fecha del pago no podrá ser posterior a la fecha actual.
+
+Los pagos futuros o programados quedan fuera del alcance.
+
 ### RF-PAG-04 — Aplicación del pago
 
 Cuando el pago sea menor que el saldo:
@@ -356,7 +364,17 @@ Si el pago revertido generó saldo a favor, dicho saldo deberá reducirse o elim
 
 ### RF-PAG-10 — Confirmación
 
-Registrar, revertir o eliminar movimientos financieros requerirá confirmación cuando la acción pueda cambiar saldos de forma significativa o irreversible.
+Toda acción de registrar, revertir o eliminar un movimiento financiero requerirá confirmación.
+
+La confirmación mostrará:
+
+- cliente;
+- deuda;
+- monto;
+- moneda;
+- fecha;
+- efecto previsto sobre el saldo pendiente;
+- saldo a favor que pudiera generarse o modificarse.
 
 ## 8. Cálculos financieros
 
