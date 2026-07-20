@@ -192,3 +192,45 @@ No se registrarán resultados futuros ni acciones todavía no ejecutadas.
 - Resultado: requisitos documentados y pendientes de presión final.
 - Decisión humana: elaboración autorizada.
 - Siguiente estado: revisar casos límite y autorizar congelamiento.
+
+## Entrada P4-7 — cierre
+
+- Fecha: 19 de julio de 2026
+- Gate: P4-7
+- Contexto: congelamiento de requisitos
+- Actividad: revisión, presión final y aprobación formal de requisitos funcionales y no funcionales.
+- Evidencia:
+  - `docs/REQUIREMENTS.md`;
+  - aprobación explícita del responsable humano;
+  - ambigüedades de clientes, fechas de pago y confirmaciones corregidas.
+- Resultado: requisitos congelados.
+- Decisión humana: P4-7 cerrado.
+- Siguiente estado: iniciar modelado de dominio.
+
+## Entrada P4-8 — en curso
+
+- Fecha: 19 de julio de 2026
+- Gate: P4-8
+- Contexto: modelado de dominio
+- Actividad:
+  - identificación de agregados;
+  - modelado de Cliente, Deuda, Pago, Reversión y Respaldo;
+  - definición de invariantes monetarias;
+  - modelado de saldo pendiente y saldo a favor;
+  - derivación de estados;
+  - diferenciación entre archivo y papelera;
+  - definición de eventos y comandos;
+  - identificación de errores y estados imposibles;
+  - trazabilidad hacia requisitos congelados.
+- Archivos afectados:
+  - `docs/DOMAIN-AND-DESIGN.md`;
+  - `workflow/GATES.md`;
+  - `workflow/SESSION-LOG.md`.
+- Restricciones respetadas:
+  - sin arquitectura técnica;
+  - sin selección tecnológica;
+  - sin instalación de skills;
+  - sin código.
+- Resultado: modelo de dominio propuesto y pendiente de presión final.
+- Decisión humana: elaboración autorizada.
+- Siguiente estado: revisar invariantes y aprobar P4-8.
