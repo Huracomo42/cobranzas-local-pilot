@@ -18,13 +18,13 @@ Este archivo es la única fuente válida para la numeración y estado de gates.
 | ---- | ----------------------------------------- | ----------- |
 | P4-5 | Problema, usuario y contexto investigados | Cerrado |
 | P4-6 | Project Charter aprobado | Cerrado |
-| P4-7 | Requisitos presionados y congelados | En curso |
+| P4-7 | Requisitos presionados y congelados | Cerrado |
 
 ## Ingeniería
 
 | Gate  | Condición                                            | Estado      |
 | ----- | ---------------------------------------------------- | ----------- |
-| P4-8  | Modelo de dominio aprobado                           | No iniciado |
+| P4-8 | Modelo de dominio aprobado | En curso |
 | P4-9  | Diseño técnico aprobado                              | No iniciado |
 | P4-10 | Vertical slices, backlog y plan de pruebas aprobados | No iniciado |
 | P4-11 | Tecnología y plan de implementación aprobados        | No iniciado |
