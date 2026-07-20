@@ -383,3 +383,40 @@ No se registrarán resultados futuros ni acciones todavía no ejecutadas.
 - Resultado: propuesta tecnológica pendiente de presión final.
 - Decisión humana: elaboración autorizada.
 - Siguiente estado: revisar y aprobar P4-11.
+
+## Entrada P4-11 — cierre
+
+- Fecha: 20 de julio de 2026
+- Gate: P4-11
+- Contexto: aprobación de tecnología y plan de implementación
+- Evidencia:
+  - `docs/TECHNOLOGY-AND-IMPLEMENTATION.md`
+  - integración de la PR #8
+  - aprobación explícita del responsable humano
+- Resultado: tecnología y plan de implementación aprobados.
+- Decisión humana: P4-11 cerrado.
+- Siguiente estado: verificación de fase roja.
+
+## Entrada P4-12 — en curso
+
+- Fecha: 20 de julio de 2026
+- Gate: P4-12
+- Contexto: preparación y verificación de fase roja para VS-01
+- Actividad:
+  - verificación de Node.js 24.18.0 y npm 11.16.0
+  - creación del scaffolding mínimo
+  - instalación de TypeScript y Vitest
+  - creación de una prueba ejecutable para VS-01
+  - creación de un módulo deliberadamente no implementado
+  - ejecución de la prueba roja
+- Evidencia:
+  - `docs/P4-12-RED-PHASE-EVIDENCE.md`
+  - una prueba descubierta y ejecutada
+  - fallo explícito `Not implemented: VS-01`
+- Restricciones respetadas:
+  - sin implementación funcional de VS-01
+  - sin interfaz
+  - sin persistencia
+  - sin skills
+- Resultado: fase roja preparada y pendiente de revisión final.
+- Siguiente estado: presión y aprobación de P4-12.

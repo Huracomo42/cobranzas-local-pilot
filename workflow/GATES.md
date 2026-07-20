@@ -27,13 +27,13 @@ Este archivo es la única fuente válida para la numeración y estado de gates.
 | P4-8 | Modelo de dominio aprobado | Cerrado |
 | P4-9 | Diseño técnico aprobado | Cerrado |
 | P4-10 | Vertical slices, backlog y plan de pruebas aprobados | Cerrado |
-| P4-11 | Tecnología y plan de implementación aprobados        | En curso |
+| P4-11 | Tecnología y plan de implementación aprobados        | Cerrado |
 
 ## Implementación
 
 | Gate  | Condición                            | Estado      |
 | ----- | ------------------------------------ | ----------- |
-| P4-12 | Fase roja verificada                 | No iniciado |
+| P4-12 | Fase roja verificada                 | En curso |
 | P4-13 | Implementación funcional completada  | No iniciado |
 | P4-14 | Pruebas locales y regresión en verde | No iniciado |
 | P4-15 | CI en verde                          | No iniciado |
