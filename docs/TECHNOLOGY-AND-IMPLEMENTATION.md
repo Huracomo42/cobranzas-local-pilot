@@ -5,35 +5,30 @@
 
 ## 1. Identificación
 
-* Proyectocs/REQUIREMENTS.md`.
+- Proyecto: aplicación local de seguimiento de cobranzas.
+- Gate actual: P4-11.
+- Requisitos: `docs/REQUIREMENTS.md`.
+- Dominio y diseño: `docs/DOMAIN-AND-DESIGN.md`.
+- Slices y pruebas: `docs/IMPLEMENTATION-PLAN.md`.
+- Entorno principal: Windows y Visual Studio Code.
+- Agente de implementación: Claude Code.
+- Repositorio: `Huracomo42/cobranzas-local-pilot`.
 
-* Dominio y diseño: `docs/DOMAIN-AND-DESIGN.md`.
+## 2. Objetivo de P4-11
 
-* Slices y pruebas: `docs/IMPLEMENTATION-PLAN.md`.
+Seleccionar una pila tecnológica que:
 
-* Entorno principal: Windows y Visual Studio Code.
-
-* Agente de implementación: Claude Code.
-
-* Repositorio: `Huracomo42/couna pila tecnológica que:
-
-* implemente las 14 vertical slices;
-
-* funcione como aplicación web local;
-
-* conserve los datos en la computadora;
-
-* permita transacciones financieras exactas;
-
-* soporteea compatible con Windows;
-
-* pueda ser mantenida por un único repositorio;
-
-* reduzca la cantidad de tecnologías diferentes;
-
-* permita construir una interfaz visualmente avanzada y accesible;
-
-* sea adecuada para implementación asistida por Claude Code.
+- implemente las 14 vertical slices;
+- funcione como aplicación web local;
+- conserve los datos en la computadora;
+- permita transacciones financieras exactas;
+- soporte respaldo y restauración;
+- tenga pruebas automatizadas;
+- sea compatible con Windows;
+- pueda mantenerse dentro de un único repositorio;
+- reduzca la cantidad de tecnologías diferentes;
+- permita construir una interfaz visualmente avanzada y accesible;
+- sea adecuada para implementación asistida por Claude Code.
 
 ## 3. Decisión tecnológica principal
 
