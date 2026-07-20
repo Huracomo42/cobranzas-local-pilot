@@ -121,3 +121,28 @@ No se registrarán resultados futuros ni acciones todavía no ejecutadas.
   - sin código ni decisión tecnológica.
 - Medida preventiva: ninguna PR futura será fusionada antes de recibir autorización explícita.
 - Estado: registrada.
+
+## Entrada P4-5 — cierre
+
+- Fecha: 19 de julio de 2026
+- Gate: P4-5
+- Contexto: decisiones humanas de descubrimiento
+- Actividad:
+  - definición del usuario principal;
+  - delimitación del tipo y volumen de deudas;
+  - decisión sobre fechas, pagos parciales y reversión;
+  - reglas de edición, eliminación y archivo;
+  - selección de filtros y resumen mínimo;
+  - incorporación de respaldo automático local;
+  - definición del nivel visual para evaluar skills;
+  - establecimiento del criterio mínimo de utilidad.
+- Evidencia: decisiones explícitas del responsable humano incorporadas en `docs/PROJECT-CHARTER.md`.
+- Cambios de alcance aceptados:
+  - pagos parciales;
+  - reversión de pagos;
+  - respaldo automático;
+  - archivo de clientes;
+  - demostración visual avanzada.
+- Resultado: problema, usuario y contexto suficientemente investigados.
+- Decisión humana: P4-5 aprobado.
+- Siguiente estado: revisar y aprobar el Project Charter en P4-6.

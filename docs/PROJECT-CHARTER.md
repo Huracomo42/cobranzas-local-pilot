@@ -1,6 +1,6 @@
 # Descubrimiento y Project Charter — PILOT-004
 
-> Estado: borrador de descubrimiento para P4-5.
+> Estado: investigación de P4-5 concluida; Project Charter propuesto para aprobación en P4-6.
 > Este documento no congela requisitos, no selecciona tecnología y no autoriza implementación.
 
 ## 1. Identificación
@@ -620,7 +620,124 @@ El producto será útil si un usuario puede, sin capacitación especializada:
 
 Esta hipótesis debe transformarse en criterios medibles antes de congelar requisitos.
 
-## 25. Criterio propuesto para cerrar P4-5
+## 25. Decisiones humanas de descubrimiento
+
+Las siguientes decisiones fueron tomadas por el responsable humano el 19 de julio de 2026.
+
+### 25.1 Usuario y contexto
+
+* Usuario principal: pequeño comerciante o responsable de un negocio familiar.
+* Tipo de obligaciones: deudas comerciales y préstamos personales.
+* Escala objetivo: hasta 100 clientes y 500 deudas.
+* Uso principal: una sola persona desde una computadora.
+* Forma del producto: página web ejecutada localmente.
+* Funcionamiento sin conexión: no constituye requisito obligatorio.
+
+### 25.2 Registro de deudas
+
+Toda deuda deberá incluir:
+
+* cliente;
+* concepto obligatorio;
+* monto;
+* fecha de vencimiento opcional.
+
+Una deuda sin fecha de vencimiento se clasificará como `pendiente sin fecha` y no como vencida.
+
+### 25.3 Pagos
+
+Los pagos parciales forman parte del alcance.
+
+La solución deberá permitir:
+
+* registrar uno o más pagos parciales;
+* calcular el saldo pendiente;
+* identificar cuándo la deuda queda pagada;
+* revertir un pago registrado por error.
+
+La representación exacta de pagos y saldos se decidirá durante el modelado de dominio.
+
+### 25.4 Edición, eliminación y archivo
+
+* Los clientes pueden editarse.
+* Las deudas pueden editarse y eliminarse.
+* Un cliente sin deudas puede eliminarse.
+* Un cliente con deudas no puede eliminarse; debe archivarse.
+* Las consecuencias de eliminar una deuda con pagos registrados deberán definirse durante la presión de requisitos.
+
+### 25.5 Consulta y resumen
+
+Los filtros mínimos serán:
+
+* todas;
+* pendientes;
+* vencidas;
+* pagadas.
+
+El resumen principal mostrará:
+
+* total monetario pendiente;
+* cantidad de deudas vencidas.
+
+No se incorpora todavía búsqueda por cliente ni filtros por rango de fechas.
+
+### 25.6 Persistencia y respaldo
+
+La aplicación utilizará persistencia local e incluirá respaldo automático local.
+
+Durante P4-7 deberán definirse:
+
+* evento que genera el respaldo;
+* frecuencia;
+* cantidad de copias;
+* ubicación;
+* formato;
+* restauración;
+* comportamiento ante corrupción;
+* exclusión de los datos del repositorio Git.
+
+### 25.7 Calidad visual y skills
+
+El frontend tendrá un nivel de demostración visual avanzada para evaluar el aporte de skills especializadas.
+
+Esto no autoriza todavía la selección o instalación de ninguna skill.
+
+El resultado deberá seguir priorizando:
+
+* claridad;
+* accesibilidad;
+* eficiencia;
+* legibilidad;
+* ausencia de ornamentación innecesaria.
+
+### 25.8 Criterio mínimo de utilidad
+
+Un usuario sin asistencia deberá poder:
+
+1. registrar una deuda;
+2. consultar una deuda;
+3. registrar un pago total o parcial;
+4. identificar las deudas vencidas;
+5. consultar el total pendiente;
+
+y deberá poder reconocer las deudas vencidas y el total pendiente en menos de diez segundos desde la vista principal.
+
+### 25.9 Cambios frente al alcance provisional
+
+Se incorporan formalmente durante descubrimiento:
+
+* pagos parciales;
+* reversión de pagos;
+* respaldo automático local;
+* archivo de clientes;
+* nivel visual avanzado para evaluar skills.
+
+Estos cambios son válidos porque se realizan antes del congelamiento de requisitos de P4-7.
+
+No autorizan implementación ni selección tecnológica.
+
+
+## 26. Criterio de cierre de P4-5
 
 P4-5 podrá cerrarse cuando el responsable humano confirme que:
 
@@ -635,6 +752,12 @@ P4-5 podrá cerrarse cuando el responsable humano confirme que:
 * la desviación de PR #1 quedó registrada;
 * las preguntas pendientes permiten preparar el Project Charter.
 
-## 26. Estado
+## 27. Estado
 
-P4-5 permanece en curso hasta la revisión humana de este documento.
+La investigación de problema, usuario y contexto ha concluido.
+
+Los principales vacíos de producto fueron resueltos mediante decisiones humanas y los restantes fueron derivados explícitamente a presión de requisitos, modelado de dominio o diseño técnico.
+
+P4-5 queda cerrado.
+
+El documento pasa a estado de Project Charter propuesto para revisión y aprobación en P4-6.
