@@ -84,3 +84,40 @@ No se registrarán resultados futuros ni acciones todavía no ejecutadas.
 - Resultado: cerrado.
 - Decisión humana: snapshot verificado y aceptado.
 - Siguiente estado: iniciar investigación del problema, usuario y contexto en P4-5.
+
+## Entrada P4-5 — en curso
+
+- Fecha: 19 de julio de 2026
+- Gate: P4-5
+- Contexto: descubrimiento e investigación
+- Actividad:
+  - investigación preliminar del problema;
+  - delimitación del usuario provisional;
+  - identificación del flujo actual probable;
+  - análisis inicial de privacidad, seguridad y accesibilidad;
+  - identificación de alternativas existentes;
+  - registro de skills frontend candidatas;
+  - clasificación de afirmaciones como hechos, inferencias y vacíos documentales.
+- Archivos afectados:
+  - `docs/PROJECT-CHARTER.md`
+  - `workflow/GATES.md`
+  - `workflow/SESSION-LOG.md`
+- Evidencia:
+  - borrador de descubrimiento contenido en `docs/PROJECT-CHARTER.md`;
+  - ausencia de código de producto;
+  - ausencia de selección tecnológica;
+  - skills registradas únicamente como candidatas.
+- Resultado: investigación documentada y pendiente de revisión humana.
+- Decisión humana: elaboración del borrador autorizada.
+- Siguiente estado: revisar la investigación y resolver los vacíos necesarios para cerrar P4-5.
+
+### Desviación DEV-P4-01
+
+- Hecho: la PR #1 fue fusionada antes de la autorización metodológica final.
+- Evaluación: desviación operativa no bloqueante.
+- Impacto:
+  - únicamente documentación;
+  - tres archivos modificados;
+  - sin código ni decisión tecnológica.
+- Medida preventiva: ninguna PR futura será fusionada antes de recibir autorización explícita.
+- Estado: registrada.
