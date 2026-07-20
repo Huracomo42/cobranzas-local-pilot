@@ -146,3 +146,49 @@ No se registrarán resultados futuros ni acciones todavía no ejecutadas.
 - Resultado: problema, usuario y contexto suficientemente investigados.
 - Decisión humana: P4-5 aprobado.
 - Siguiente estado: revisar y aprobar el Project Charter en P4-6.
+
+## Entrada P4-6 — cierre
+
+- Fecha: 19 de julio de 2026
+- Gate: P4-6
+- Contexto: aprobación del Project Charter
+- Actividad: revisión y aprobación formal del Project Charter de PILOT-004.
+- Evidencia: aprobación explícita del responsable humano.
+- Resultado: Project Charter aprobado.
+- Decisión humana: P4-6 cerrado.
+- Siguiente estado: iniciar presión y congelamiento de requisitos.
+
+## Entrada P4-7 — en curso
+
+- Fecha: 19 de julio de 2026
+- Gate: P4-7
+- Contexto: presión de requisitos
+- Actividad:
+  - definición de reglas monetarias;
+  - selección de monedas;
+  - definición de pagos parciales y excedentes;
+  - trazabilidad de reversiones;
+  - bloqueo de edición después del primer pago;
+  - definición de papelera;
+  - archivo y reactivación de clientes;
+  - cálculo automático de estados;
+  - definición de respaldo y restauración;
+  - filtros y orden configurable;
+  - criterios de accesibilidad;
+  - criterios de evaluación de skills.
+- Decisiones relevantes:
+  - pagos superiores al saldo generan saldo a favor;
+  - las deudas nunca presentan saldo negativo;
+  - los pagos revertidos permanecen en el historial;
+  - la eliminación es recuperable;
+  - los totales se separan por moneda;
+  - se conservan cinco respaldos;
+  - la restauración es manual;
+  - se exige soporte para lector de pantalla.
+- Archivos afectados:
+  - `docs/REQUIREMENTS.md`
+  - `workflow/GATES.md`
+  - `workflow/SESSION-LOG.md`
+- Resultado: requisitos documentados y pendientes de presión final.
+- Decisión humana: elaboración autorizada.
+- Siguiente estado: revisar casos límite y autorizar congelamiento.
